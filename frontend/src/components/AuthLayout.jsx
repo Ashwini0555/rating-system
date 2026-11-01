@@ -1,3 +1,4 @@
+import ThemeToggle from './ThemeToggle';
 export default function AuthLayout({ title, subtitle, footer, children }) {
   return (
     <div className="auth-split">
@@ -18,6 +19,7 @@ export default function AuthLayout({ title, subtitle, footer, children }) {
       </aside>
 
       <section className="auth-panel">
+        <div className="auth-theme"><ThemeToggle /></div>
         <div className="auth-box">
           <h1>{title}</h1>
           <p className="muted">{subtitle}</p>

@@ -1,6 +1,7 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
 import { ROLE_LABELS } from '../constants';
+import ThemeToggle from './ThemeToggle';
 import Icon from './Icon';
 
 const LINKS = {
@@ -34,6 +35,10 @@ export default function Sidebar() {
       </nav>
 
       <div className="side-bottom">
+        <div className="side-row">
+  <span>Theme</span>
+  <ThemeToggle />
+</div>
         <NavLink to="/password" className="side-link">
           <Icon name="lock" /> Change password
         </NavLink>

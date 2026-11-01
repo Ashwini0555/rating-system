@@ -11,8 +11,10 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (res) => res,
   (err) => {
+    // Expired or invalid session: clear BOTH entries and go back to login.
     if (err.response?.status === 401 && !err.config.url.includes('/auth/login')) {
-      localStorage.clear();
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
       window.location.assign('/login');
     }
     return Promise.reject(err);
