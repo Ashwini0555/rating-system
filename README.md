@@ -46,14 +46,13 @@ MySQL 8 installed and running
 1. Backend
 ```bash
 cd backend
-copy .env.example .env      # Mac/Linux: cp .env.example .env
 ```
 Fill in the new `.env` file:
 ```env
 PORT=5000
 DB_HOST=localhost
 DB_PORT=3306                 # use your MySQL port, e.g. 3307, if different
-DB_USER=root
+DB_USER=your_mysql_user
 DB_PASSWORD=your_mysql_password
 DB_NAME=rating_system
 JWT_SECRET=a_long_random_string
@@ -68,7 +67,6 @@ Generate a strong `JWT_SECRET` and paste the output into `.env`:
 ```bash
 node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 ```
-Don't commit or share `.env` (it's in `.gitignore`); share `.env.example` instead.
 Run the backend commands:
 ```bash
 npm install
@@ -134,9 +132,7 @@ Access denied for user 'root': Check `DB_USER` and `DB_PASSWORD` in `backend/.en
   ALTER TABLE users  MODIFY name VARCHAR(60) NOT NULL;
   ALTER TABLE stores MODIFY name VARCHAR(60) NOT NULL;
   ```
-`.env` changes not applied: Restart the backend; it reads `.env` on startup.
-Login fails or network errors appear: Make sure the backend is running on port 5000.
-`JWT_SECRET` is not set: Create `backend/.env` from `.env.example`.
+
 
 "This owner already has a store": Each Store Owner can have only one store.
 No owners in Add store dropdown: Create a Store Owner first. Owners with an assigned store aren't listed.
