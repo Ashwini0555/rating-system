@@ -4,12 +4,40 @@ const HttpError = require('../utils/httpError');
 const { orderBy, like } = require('../utils/listQuery');
 
 exports.stats = async (req, res) => {
-  const [[row]] = await db.query(
+  const [[totals]] = await db.query(
     `SELECT (SELECT COUNT(*) FROM users)   AS totalUsers,
             (SELECT COUNT(*) FROM stores)  AS totalStores,
-            (SELECT COUNT(*) FROM ratings) AS totalRatings`
+            (SELECT COUNT(*) FROM ratings) AS totalRatings,
+            (SELECT ROUND(AVG(rating), 1) FROM ratings) AS averageRating`
   );
-  res.json(row);
+
+  const [counts] = await db.query('SELECT rating, COUNT(*) AS total FROM ratings GROUP BY rating');
+  const distribution = [1, 2, 3, 4, 5].map((n) => Number(counts.find((c) => c.rating === n)?.total || 0));
+
+  const [topStores] = await db.query(
+    `SELECT s.id, s.name, ROUND(AVG(r.rating), 1) AS avgRating, COUNT(r.id) AS ratingCount
+       FROM stores s JOIN ratings r ON r.store_id = s.id
+      GROUP BY s.id
+      ORDER BY avgRating DESC, ratingCount DESC
+      LIMIT 5`
+  );
+
+  const [recent] = await db.query(
+    `SELECT r.id, u.name AS userName, s.name AS storeName, r.rating, r.updated_at AS updatedAt
+       FROM ratings r
+       JOIN users u  ON u.id = r.user_id
+       JOIN stores s ON s.id = r.store_id
+      ORDER BY r.updated_at DESC
+      LIMIT 5`
+  );
+
+  res.json({
+    ...totals,
+    averageRating: totals.averageRating === null ? null : Number(totals.averageRating),
+    distribution,
+    topStores: topStores.map((s) => ({ ...s, avgRating: Number(s.avgRating) })),
+    recent,
+  });
 };
 
 exports.createUser = async (req, res) => {

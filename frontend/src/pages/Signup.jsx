@@ -1,5 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../api';
+import AuthLayout from '../components/AuthLayout';
 import UserForm from '../components/UserForm';
 
 export default function Signup() {
@@ -10,12 +11,12 @@ export default function Signup() {
   };
 
   return (
-    <div className="auth-page">
-      <div className="card auth-card">
-        <h1>Create an account</h1>
-        <UserForm submitLabel="Sign up" onSubmit={register} />
-        <p className="muted">Already registered? <Link to="/login">Log in</Link></p>
-      </div>
-    </div>
+    <AuthLayout
+      title="Create your account"
+      subtitle="Sign up to start rating stores."
+      footer={<>Already registered? <Link to="/login">Log in</Link></>}
+    >
+      <UserForm submitLabel="Sign up" onSubmit={register} />
+    </AuthLayout>
   );
 }

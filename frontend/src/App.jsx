@@ -1,7 +1,7 @@
 import { Navigate, Outlet, Route, Routes } from 'react-router-dom';
 import { useAuth } from './AuthContext';
 import { homePath } from './constants';
-import Navbar from './components/Navbar';
+import Sidebar from './components/Sidebar';
 import ProtectedRoute from './components/ProtectedRoute';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
@@ -15,12 +15,12 @@ import OwnerDashboard from './pages/owner/Dashboard';
 
 function Layout() {
   return (
-    <>
-      <Navbar />
-      <main className="container">
+    <div className="app-shell">
+      <Sidebar />
+      <main className="app-main">
         <Outlet />
       </main>
-    </>
+    </div>
   );
 }
 
